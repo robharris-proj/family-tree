@@ -92,7 +92,7 @@ test('reports ambiguous titles in the photo gallery, outside the profile sidebar
 test('renders a native directory input with an accessible label', () => {
   const html = renderToStaticMarkup(createElement(PhotoFolderPicker, {
     folder: null, busy: false, status: '', canChooseDirectory: false,
-    chooseDirectory() {}, selectFiles() {}, reconnect() {}, unlink() {},
+    chooseDirectory() {}, onSelect() {}, reconnect() {}, onClear() {},
   }));
   assert.match(html, /<label[^>]*>Link photo folder<input[^>]*webkitdirectory=""/);
 });
@@ -100,7 +100,7 @@ test('renders a native directory input with an accessible label', () => {
 test('offers to reconnect a saved directory while displaying saved photos', () => {
   const html = renderToStaticMarkup(createElement(PhotoFolderPicker, {
     folder: { name: 'Photos', imageCount: 2 }, busy: false, status: '', canChooseDirectory: true,
-    reconnectName: 'Photos', chooseDirectory() {}, selectFiles() {}, reconnect() {}, unlink() {},
+    reconnectName: 'Photos', chooseDirectory() {}, onSelect() {}, reconnect() {}, onClear() {},
   }));
   assert.match(html, /Reconnect photo folder/);
   assert.match(html, /Showing saved photos/);
