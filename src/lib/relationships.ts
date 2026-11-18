@@ -9,6 +9,12 @@ export function lifespan(person: Person) {
   return died ? 'Died ' + died : '';
 }
 
+export function isDeceased(person: Person) {
+  return person.events.some(event =>
+    ['DEAT', 'BURI', 'CREM'].includes(event.tag) && event.detail.toUpperCase() !== 'N'
+  );
+}
+
 export function eligibleFamilies(relationship: Relationship, relative?: Person) {
   if (!relative) return [];
   if (relationship === 'child') return relative.partnerFamilies;

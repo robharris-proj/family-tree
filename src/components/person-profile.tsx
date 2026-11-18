@@ -1,5 +1,6 @@
 import { lifespan, personRelationships } from '../lib/relationships';
 import type { LifeEvent, Person, Tree } from '../lib/types';
+import { PersonAvatar } from './person-avatar';
 import { PersonLink } from './person-link';
 
 function EventList({ events }: { events: LifeEvent[] }) {
@@ -22,9 +23,14 @@ export function PersonProfile({ tree, person, onSelect }: {
   const familyEvents = person.partnerFamilies.flatMap(family => family.events);
   return (
     <section className="panel profile" aria-label="Selected person’s profile">
-      <div className="label">Profile</div>
-      <h2>{person.name}</h2>
-      <p className="muted">{lifespan(person)}</p>
+      <div className="profile-heading">
+        <PersonAvatar sex={person.sex} />
+        <div>
+          <div className="label">Profile</div>
+          <h2>{person.name}</h2>
+          <p className="muted">{lifespan(person)}</p>
+        </div>
+      </div>
       <h3>Life events</h3>
       <EventList events={person.events} />
       {!person.events.length && <p className="muted">No life events recorded.</p>}

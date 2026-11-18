@@ -1,4 +1,3 @@
-import { lifespan } from '../lib/relationships';
 import type { Person, Tree, TreeView } from '../lib/types';
 import { PersonLink } from './person-link';
 
@@ -34,7 +33,7 @@ export function FamilyTree({ tree, person, view, onSelect, onView }: Props) {
     const members = [...new Set([...partners, ...children])].map(id => {
       const relative = tree.people.get(id)!;
       const pedigree = relative.pedigree.get(family.id);
-      const caption = partners.includes(id) ? ['Partner', lifespan(relative)].filter(Boolean).join(' · ')
+      const caption = partners.includes(id) ? 'Partner'
         : pedigree ? 'Child · ' + pedigree : 'Child';
       return { id, caption };
     });

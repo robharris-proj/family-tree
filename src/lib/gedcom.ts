@@ -1,4 +1,4 @@
-import type { Family, LifeEvent, Person, Tree } from './types';
+import type { Family, LifeEvent, MediaReference, Person, Tree } from './types';
 
 interface RecordNode {
   id?: string;
@@ -51,13 +51,34 @@ function readEvents(record: RecordNode, sources: Map<string, string>): LifeEvent
   }));
 }
 
+function readMedia(person: RecordNode, objects: Map<string, RecordNode>): MediaReference[] {
+  const media = new Map<string, MediaReference>();
+  for (const [linkIndex, link] of children(person, 'OBJE').entries()) {
+    const object = link.value ? objects.get(link.value) : link;
+    if (!object) continue;
+    const files = children(object, 'FILE');
+    const primary = value(link, '_PRIM').toUpperCase() === 'Y';
+    for (const [fileIndex, file] of (files.length ? files : [undefined]).entries()) {
+      const id = object.id ? object.id + ':' + fileIndex : 'inline:' + linkIndex + ':' + fileIndex;
+      const title = value(file, 'TITL') || value(object, 'TITL');
+      const path = file?.value || '';
+      const format = value(file, 'FORM') || value(object, 'FORM');
+      if (!title && !path) continue;
+      media.set(id, { id, title, path, format, primary: primary || media.get(id)?.primary === true });
+    }
+  }
+  return [...media.values()].sort((a, b) => Number(b.primary) - Number(a.primary));
+}
+
 export function parseGedcom(raw: string): Tree {
   const sources = new Map<string, string>();
+  const objects = new Map<string, RecordNode>();
   const people = new Map<string, Person>();
   const families: Family[] = [];
   const records = readRecords(raw);
   for (const record of records) {
     if (record.id && record.tag === 'SOUR') sources.set(record.id, value(record, 'TITL') || value(record, 'ABBR'));
+    if (record.id && record.tag === 'OBJE') objects.set(record.id, record);
   }
   for (const record of records) {
     if (!record.id || record.tag !== 'INDI') continue;
@@ -69,6 +90,7 @@ export function parseGedcom(raw: string): Tree {
       surname: value(name, 'SURN') || name?.value.split('/')[1] || '',
       sex: value(record, 'SEX'),
       events: readEvents(record, sources).sort((a, b) => Number(year(a.date) || '9999') - Number(year(b.date) || '9999')),
+      media: readMedia(record, objects),
       pedigree: new Map(children(record, 'FAMC').map(link => [link.value, value(link, 'PEDI')])),
       partnerLinks: children(record, 'FAMS').map(link => link.value),
       parentFamilies: [],

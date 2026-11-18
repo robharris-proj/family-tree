@@ -7,12 +7,21 @@ export interface LifeEvent {
   sources: string[];
 }
 
+export interface MediaReference {
+  id: string;
+  title: string;
+  path: string;
+  format: string;
+  primary: boolean;
+}
+
 export interface Person {
   id: string;
   name: string;
   surname: string;
   sex: string;
   events: LifeEvent[];
+  media: MediaReference[];
   pedigree: Map<string, string>;
   partnerLinks: string[];
   parentFamilies: Family[];

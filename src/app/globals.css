@@ -128,6 +128,13 @@ h1 {
   margin-bottom: 30px;
 }
 
+.tree-column {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
 .panel {
   border: 1px solid var(--line);
   background: var(--white);
@@ -135,7 +142,7 @@ h1 {
   min-width: 0;
 }
 
-.directory,.profile {
+.directory,.profile,.profile-photos {
   padding: 19px;
 }
 
@@ -242,6 +249,17 @@ h1 {
   font: 12px system-ui;
 }
 
+.card .tree-card-lifespan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.headstone {
+  font: 14px / 1 system-ui, sans-serif;
+}
+
 .card.focus {
   background: var(--green);
   color: white;
@@ -281,6 +299,157 @@ h1 {
 
 .family:first-of-type {
   border-top: 0;
+}
+
+.profile-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.photo-folder {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.photo-folder-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.photo-folder-choose {
+  position: relative;
+}
+
+.photo-folder-choose:focus-within {
+  outline: 3px solid #a27640;
+  outline-offset: 3px;
+}
+
+.photo-folder-choose input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.photo-folder small, .photo-item small {
+  display: block;
+  color: var(--muted);
+}
+
+.photo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr));
+  gap: 10px;
+  padding: 0;
+  margin: 8px 0 0;
+  list-style: none;
+}
+
+.photo-item {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  padding: 8px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.photo-thumbnail {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 6px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.photo-thumbnail img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.profile-heading > div {
+  min-width: 0;
+}
+
+.profile-avatar {
+  --avatar-background: #ebe4d4;
+  --avatar-edge: #dbd0b9;
+  --avatar-clothes: #7d715b;
+  --avatar-hair: #433f36;
+  --avatar-face: #bdab8d;
+  position: relative;
+  isolation: isolate;
+  flex: 0 0 56px;
+  height: 56px;
+  overflow: hidden;
+  border: 1px solid var(--avatar-edge);
+  border-radius: 50%;
+  background: var(--avatar-background);
+}
+
+.profile-avatar[data-variant="male"] {
+  --avatar-background: #dce7da;
+  --avatar-edge: #bfd2bf;
+  --avatar-clothes: #496754;
+  --avatar-hair: #33483a;
+  --avatar-face: #b9aa8d;
+}
+
+.profile-avatar[data-variant="female"] {
+  --avatar-background: #eedfd6;
+  --avatar-edge: #dfc7ba;
+  --avatar-clothes: #805d4e;
+  --avatar-hair: #594137;
+  --avatar-face: #c6a589;
+}
+
+.profile-avatar::after {
+  content: "";
+  position: absolute;
+  inset: auto 6px -8px;
+  height: 28px;
+  border-radius: 50% 50% 0 0;
+  background: var(--avatar-clothes);
+}
+
+.profile-avatar-head {
+  position: absolute;
+  inset: 13px 16px auto;
+  height: 25px;
+  border-radius: 45% 45% 48% 48%;
+  background: var(--avatar-face);
+}
+
+.profile-avatar-hair {
+  position: absolute;
+  inset: 8px 14px auto;
+  height: 21px;
+  border-radius: 48% 48% 35% 35%;
+  background: var(--avatar-hair);
+}
+
+.profile-avatar[data-variant="female"] .profile-avatar-hair {
+  inset-inline: 10px;
+  height: 35px;
+  border-radius: 47% 47% 30% 30%;
+}
+
+.profile-avatar[data-variant="neutral"] .profile-avatar-hair {
+  display: none;
 }
 
 .profile h2 {
@@ -450,6 +619,44 @@ dialog::backdrop {
 dialog h2 {
   font-size: 29px;
   margin-bottom: 13px;
+}
+
+.photo-lightbox {
+  width: min(1100px, calc(100% - 28px));
+  max-height: calc(100% - 28px);
+  padding: 0;
+}
+
+.photo-lightbox::backdrop {
+  background: #13251ddd;
+}
+
+.photo-lightbox-frame {
+  padding: 12px;
+}
+
+.photo-lightbox-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.photo-lightbox-header h2 {
+  margin: 0;
+  font-size: clamp(18px, 3vw, 24px);
+  overflow-wrap: anywhere;
+}
+
+.photo-lightbox-frame img {
+  display: block;
+  max-width: 100%;
+  max-height: 75dvh;
+  width: auto;
+  height: auto;
+  margin-inline: auto;
+  object-fit: contain;
 }
 
 .person-fields {
